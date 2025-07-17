@@ -1,101 +1,139 @@
 #include <iostream>
-#include "Product.hpp"
-#include "ProductService.hpp"
+#include "Employee.hpp"
+#include "EmployeeManagement.hpp"
 
 using namespace std;
 
-void menu() {
-    cout << "1. Add" << endl;
-    cout << "2. Get all" << endl;
-    cout << "3. Get by id" << endl;
-    cout << "4. Delete by id" << endl;
-    cout << "5. Update by id" << endl;
-    cout << "0. Exit" << endl;
+void Menu()
+{
+    cout << "========| Employee Management System |========" << endl;
+    cout << "========| 1. AddEmployee             |========" << endl;
+    cout << "========| 2. UpdateEmployeeById      |========" << endl;
+    cout << "========| 3. DeleteEmployeeById      |========" << endl;
+    cout << "========| 4. ListAllEmployee         |========" << endl;
+    cout << "========| 5. GetEmployeeById         |========" << endl;
+    cout << "========| 6. ExistsById              |========" << endl;
+    cout << "========| 0. Exit                    |========" << endl;
+    cout << "==============================================" << endl;
 }
 
-ProductService productService;
+EmployeeManagement employeeManagement;
 
-int main() {
+int main()
+{
     system("cls");
-    
+
     int op;
-    do {
-        menu();
-        cout << "Enter an option -> ";
+    do
+    {
+         Menu();
+        cout << "Enter an option:  ";
         cin >> op;
 
-        if (op == 0) {
+        if (op == 0)
+        {
             cout << "Exiting..." << endl;
             return 0;
         }
 
-        switch(op) {
-            case 1: {
-                system("cls");
-                int id, qty;
-                string name;
-                double price;
-                cout << "Please input id: "; cin >> id;
-                if (productService.existsById(id)) {
-                    cout << "Product with id: " << id << " already exists" << endl;
-                    break;
-                }
-                cout << "Please input name: "; cin >> name;
-                cout << "Please input price: "; cin >> price;
-                cout << "Please inputqty: "; cin >> qty;
+        switch (op)
+        {
+        case 1:
+        {
+            system("cls");
+            int id, age;
+            string name;
+            double salary;
+            cout << "Please input Id: ";
+            cin >> id;
+            if (employeeManagement.existsById(id))
+            {
+                cout << "Employee with id: " << id << " already exists" << endl;
+                break;
+            }
+            cout << "Please input Name: ";
+            cin >> name;
+            cout << "Please input Age: ";
+            cin >> age;
+            cout << "Please input Salary: ";
+            cin >> salary;
 
-                Product p(id, name, price, qty);
-                productService.addProduct(p);
+            Employee emp(id, name, age, salary);
+            employeeManagement.addEmployee(emp);
+            break;
+        }
+        case 2:
+        {
+            system("cls");
+            int id;
+            cout << "Please input employee id to update:";
+            cin >> id;
+            if (!employeeManagement.existsById(id))
+            {
+                cout << "Employee with id: " << id << " does not exist" << endl;
                 break;
             }
-            case 2: {
-                system("cls");
-                productService.getAllProducts();
+            string name;
+            int age;
+            double salary;
+            cout << "Please input new Name: ";
+            cin >> name;
+            cout << "Please input new Age: ";
+            cin >> age;
+            cout << "Please input new Salary: ";
+            cin >> salary;
+            employeeManagement.updateEmployeeById(id, name, age, salary);
+            break;
+        }
+        case 3:
+        {
+            system("cls");
+            int id;
+            cout << "Please input employee id to delete:";
+            cin >> id;
+            if (!employeeManagement.existsById(id))
+            {
+                cout << "Employee with id: " << id << " does not exist" << endl;
                 break;
             }
-            case 3: {
-                system("cls");
-                int id;
-                cout << "Please input id: ";
-                cin >> id;
-                productService.getProductById(id);
-                break;
+            employeeManagement.deleteEmployeeById(id);
+            break;
+        }
+        case 4:
+        {
+            system("cls");
+            employeeManagement.listAllEmployees();
+            break;
+        }
+        case 5:
+        {
+            system("cls");
+            int id;
+            cout << "Please input id: ";
+            cin >> id;
+            employeeManagement.getEmployeeById(id);
+            break;
+        }
+        case 6:
+        {
+            system("cls");
+            int id;
+            cout << "Please input id: ";
+            cin >> id;
+            if (employeeManagement.existsById(id))
+            {
+                cout << "Employee with id: " << id << " exists" << endl;
             }
-            case 4: {
-                system("cls");
-                int id;
-                cout << "Please input product id to delete:"; 
-                cin >> id;
-                if (!productService.existsById(id)) {
-                    cout << "Product with id: " << id << " does not exist" << endl;
-                    break;
-                }
-                productService.deleteProductById(id);
-                break;
+            else
+            {
+                cout << "Employee with id: " << id << " does not exist" << endl;
             }
-            case 5: {
-                system("cls");
-                int id;
-                cout << "Please input product id to update:"; 
-                cin >> id;
-                if (!productService.existsById(id)) {
-                    cout << "Product with id: " << id << " does not exist" << endl;
-                    break;
-                }
-                string name;
-                double price;
-                int qty;
-                cout << "Please input new name: "; cin >> name;
-                cout << "Please input new price: "; cin >> price;
-                cout << "Please input new qty: "; cin >> qty;
-                productService.updateProductById(id, name, price, qty); 
-                break;
-            }
-            default: 
-                cout << "Invalid option!" << endl;
+            break;
+        }
+        default:
+            cout << "Invalid option!" << endl;
         }
 
-    } while(op != 0);
-
+    } while (op != 0);
     return 0;
 }
