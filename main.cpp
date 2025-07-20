@@ -1,139 +1,84 @@
+#include "Library.hpp"
 #include <iostream>
-#include "Employee.hpp"
-#include "EmployeeManagement.hpp"
-
-using namespace std;
-
-void Menu()
+#include <iomanip>
+void showMenu()
 {
-    cout << "========| Employee Management System |========" << endl;
-    cout << "========| 1. AddEmployee             |========" << endl;
-    cout << "========| 2. UpdateEmployeeById      |========" << endl;
-    cout << "========| 3. DeleteEmployeeById      |========" << endl;
-    cout << "========| 4. ListAllEmployee         |========" << endl;
-    cout << "========| 5. GetEmployeeById         |========" << endl;
-    cout << "========| 6. ExistsById              |========" << endl;
-    cout << "========| 0. Exit                    |========" << endl;
-    cout << "==============================================" << endl;
+    std::cout << "=======================================" << std::endl;
+    std::cout << "=====| Library Management System |=====" << std::endl;
+    std::cout << "=====| 1. Add     Book           |=====" << std::endl;
+    std::cout << "=====| 2. Display Book           |=====" << std::endl;
+    std::cout << "=====| 3. Search  Book           |=====" << std::endl;
+    std::cout << "=====| 4. Borrow  Book           |=====" << std::endl;
+    std::cout << "=====| 5. Return  Book           |=====" << std::endl;
+    std::cout << "=====| 6. Exit                   |=====" << std::endl;
+    std::cout << "=======================================" << std::endl;
 }
+int main(){
+    Library library;
+    int choice;
+    do {
+        showMenu();
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
 
-EmployeeManagement employeeManagement;
+        switch (choice) {
 
-int main()
-{
-    system("cls");
-
-    int op;
-    do
-    {
-         Menu();
-        cout << "Enter an option:  ";
-        cin >> op;
-
-        if (op == 0)
-        {
-            cout << "Exiting..." << endl;
-            return 0;
-        }
-
-        switch (op)
-        {
-        case 1:
-        {
-            system("cls");
-            int id, age;
-            string name;
-            double salary;
-            cout << "Please input Id: ";
-            cin >> id;
-            if (employeeManagement.existsById(id))
-            {
-                cout << "Employee with id: " << id << " already exists" << endl;
+            case 1: {
+                system("cls");
+                std::cout << "========| Add Book |========" << std::endl;
+                std::string title, author, isbn;
+                bool isAvailable;
+                std::cout << "Enter book title: ";
+                std::cin.ignore();
+                std::getline(std::cin, title);
+                std::cout << "Enter book author: ";
+                std::getline(std::cin, author);
+                std::cout << "Enter book ISBN: ";
+                std::getline(std::cin, isbn);
+                std::cout << "Is the book available? (1 for Yes, 0 for No): ";
+                std::cin >> isAvailable;
+                library.addBook(Book(title, author, isbn, isAvailable));
                 break;
             }
-            cout << "Please input Name: ";
-            cin >> name;
-            cout << "Please input Age: ";
-            cin >> age;
-            cout << "Please input Salary: ";
-            cin >> salary;
-
-            Employee emp(id, name, age, salary);
-            employeeManagement.addEmployee(emp);
-            break;
-        }
-        case 2:
-        {
-            system("cls");
-            int id;
-            cout << "Please input employee id to update:";
-            cin >> id;
-            if (!employeeManagement.existsById(id))
-            {
-                cout << "Employee with id: " << id << " does not exist" << endl;
+            case 2:
+                std::cout << "========| Display Books |========" << std::endl;
+                library.displayBook();
+                break;
+            case 3: {
+                system("cls");
+                std::cout << "========| Search Book |========" << std::endl;
+                std::string title;
+                std::cout << "Enter book title to search: ";
+                std::cin.ignore();
+                std::getline(std::cin, title);
+                library.searchBook(title);
                 break;
             }
-            string name;
-            int age;
-            double salary;
-            cout << "Please input new Name: ";
-            cin >> name;
-            cout << "Please input new Age: ";
-            cin >> age;
-            cout << "Please input new Salary: ";
-            cin >> salary;
-            employeeManagement.updateEmployeeById(id, name, age, salary);
-            break;
-        }
-        case 3:
-        {
-            system("cls");
-            int id;
-            cout << "Please input employee id to delete:";
-            cin >> id;
-            if (!employeeManagement.existsById(id))
-            {
-                cout << "Employee with id: " << id << " does not exist" << endl;
+            case 4: {
+                system("cls");
+                std::cout << "========| Borrow Book |========" << std::endl;
+                std::string isbn;
+                std::cout << "Enter book ISBN to borrow: ";
+                std::cin >> isbn;
+                library.borrowBook(isbn);
                 break;
             }
-            employeeManagement.deleteEmployeeById(id);
-            break;
-        }
-        case 4:
-        {
-            system("cls");
-            employeeManagement.listAllEmployees();
-            break;
-        }
-        case 5:
-        {
-            system("cls");
-            int id;
-            cout << "Please input id: ";
-            cin >> id;
-            employeeManagement.getEmployeeById(id);
-            break;
-        }
-        case 6:
-        {
-            system("cls");
-            int id;
-            cout << "Please input id: ";
-            cin >> id;
-            if (employeeManagement.existsById(id))
-            {
-                cout << "Employee with id: " << id << " exists" << endl;
+            case 5: {
+                system("cls");
+                std::cout << "========| Return Book |========" << std::endl;
+                std::string isbn;
+                std::cout << "Enter book ISBN to return: ";
+                std::cin >> isbn;
+                library.returnBook(isbn);
+                break;
             }
-            else
-            {
-                cout << "Employee with id: " << id << " does not exist" << endl;
-            }
-            break;
+            case 6:
+                std::cout << "Exiting..." << std::endl;
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
         }
-        default:
-            cout << "Invalid option!" << endl;
-        }
+    } while (choice != 6);
 
-    } while (op != 0);
     return 0;
 }
